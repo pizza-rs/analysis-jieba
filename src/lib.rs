@@ -1,9 +1,12 @@
+#![cfg_attr(not(feature = "std"), no_std)]
 #![forbid(unsafe_code)]
+
+extern crate alloc;
 
 use jieba_rs::Jieba;
 use pizza_engine::analysis::Token;
 use pizza_engine::analysis::Tokenizer;
-use std::borrow::Cow;
+use alloc::borrow::Cow;
 
 #[derive(Clone)]
 pub struct JiebaTokenizer {
@@ -84,3 +87,6 @@ mod tests {
         assert_eq!(tokens[3].position, 3);
     }
 }
+
+pub mod register;
+pub use register::register_all;

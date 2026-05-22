@@ -1,15 +1,14 @@
 [package]
-name = "pizza-jieba"
+name = "pizza-analysis-jieba"
 version = "0.1.0"
 edition = "2021"
-repository = "https://github.com/infinilabs/pizza-jieba"
+repository = "https://github.com/infinilabs/analysis-jieba"
 categories = ["text-processing"]
 keywords = ["pizza", "jieba", "chinese", "tokenizer", "search"]
 authors = ["INFINI Labs Team",]
 license = "MIT"
 
 
-[workspace]
 
 [dependencies]
 pizza-common = { path = "../../lib/common" }
