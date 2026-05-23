@@ -2,6 +2,7 @@
 name = "pizza-analysis-jieba"
 version = "0.1.0"
 edition = "2021"
+description = "Jieba Chinese segmentation plugin for INFINI Pizza"
 repository = "https://github.com/infinilabs/analysis-jieba"
 categories = ["text-processing"]
 keywords = ["pizza", "jieba", "chinese", "tokenizer", "search"]
@@ -10,8 +11,12 @@ license = "MIT"
 
 
 
+[features]
+default = []
+std = ["pizza-engine/std"]
+
 [dependencies]
 pizza-common = { path = "../../lib/common" }
-pizza-engine = { path = "../../lib/engine" }
+pizza-engine = { path = "../../lib/engine", default-features = false }
 
 jieba-rs = { version = "0.7", features = ["tfidf", "textrank","default-dict"],default-features = false }
