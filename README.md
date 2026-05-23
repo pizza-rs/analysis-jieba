@@ -11,7 +11,7 @@
 
 ---
 
-Chinese word segmentation for the [Pizza](https://github.com/infinilabs/pizza) search engine using [jieba-rs](https://github.com/messense/jieba-rs) — the Rust port of the popular [Jieba](https://github.com/fxsjy/jieba) Chinese text segmentation library.
+Chinese word segmentation for the [Pizza](https://github.com/pizza-rs/pizza) search engine using [jieba-rs](https://github.com/messense/jieba-rs) — the Rust port of the popular [Jieba](https://github.com/fxsjy/jieba) Chinese text segmentation library.
 
 ## Components
 
