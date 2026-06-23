@@ -10,10 +10,10 @@ use crate::JiebaTokenizer;
 
 /// Register Jieba tokenizer and analyzer.
 pub fn register_all(factory: &mut AnalysisFactory) {
-    factory.register_tokenizer("jieba", Box::new(JiebaTokenizer::new()));
+    factory.register_tokenizer_with("jieba", || Box::new(JiebaTokenizer::new()));
 
-    factory.register_analyzer(
+    factory.register_analyzer_with(
         "jieba",
-        Analyzer::new(vec![], Box::new(JiebaTokenizer::new()), vec![]),
+        || Analyzer::new(vec![], Box::new(JiebaTokenizer::new()), vec![]),
     );
 }

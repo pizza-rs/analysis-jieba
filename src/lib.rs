@@ -15,6 +15,17 @@ pub struct JiebaTokenizer {
 
 impl JiebaTokenizer {
     pub fn new() -> Self {
+        // External user dictionary first (`<config>/analysis/jieba/dict.txt`),
+        // falling back to jieba's embedded default dictionary.
+        #[cfg(feature = "std")]
+        if let Some(path) = pizza_engine::analysis::dict::resolve("jieba", "dict.txt") {
+            let f = std::fs::File::open(&path)
+                .unwrap_or_else(|e| panic!("failed to open jieba dict {path:?}: {e}"));
+            let mut reader = std::io::BufReader::new(f);
+            let jieba = Jieba::with_dict(&mut reader)
+                .unwrap_or_else(|e| panic!("failed to load jieba dict {path:?}: {e}"));
+            return JiebaTokenizer { jieba };
+        }
         JiebaTokenizer {
             jieba: Jieba::new(),
         }
