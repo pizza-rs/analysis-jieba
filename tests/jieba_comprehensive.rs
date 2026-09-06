@@ -1,7 +1,9 @@
 //! Comprehensive tests for pizza-analysis-jieba (Jieba Chinese segmentation).
 
 use pizza_analysis_jieba::JiebaTokenizer;
-use pizza_engine::analysis::{AnalysisFactory, Token, Tokenizer};
+use pizza_engine::analysis::AnalysisFactory;
+use pizza_engine::analysis::Token;
+use pizza_engine::analysis::Tokenizer;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Helpers

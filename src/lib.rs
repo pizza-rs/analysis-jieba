@@ -3,10 +3,10 @@
 
 extern crate alloc;
 
+use alloc::borrow::Cow;
 use jieba_rs::Jieba;
 use pizza_engine::analysis::Token;
 use pizza_engine::analysis::Tokenizer;
-use alloc::borrow::Cow;
 
 #[derive(Clone)]
 pub struct JiebaTokenizer {

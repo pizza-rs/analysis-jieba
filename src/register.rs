@@ -12,8 +12,7 @@ use crate::JiebaTokenizer;
 pub fn register_all(factory: &mut AnalysisFactory) {
     factory.register_tokenizer_with("jieba", || Box::new(JiebaTokenizer::new()));
 
-    factory.register_analyzer_with(
-        "jieba",
-        || Analyzer::new(vec![], Box::new(JiebaTokenizer::new()), vec![]),
-    );
+    factory.register_analyzer_with("jieba", || {
+        Analyzer::new(vec![], Box::new(JiebaTokenizer::new()), vec![])
+    });
 }
