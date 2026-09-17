@@ -15,8 +15,10 @@ pub struct JiebaTokenizer {
 
 impl JiebaTokenizer {
     pub fn new() -> Self {
-        // External user dictionary first (`<config>/analysis/jieba/dict.txt`),
-        // falling back to jieba's embedded default dictionary.
+        // External dictionary first (`<config>/analysis/jieba/dict.txt` — the
+        // full default dictionary; deploy it with `make init-analysis-dicts`),
+        // falling back to jieba's embedded default dictionary when built with
+        // `default-dict`.
         #[cfg(feature = "std")]
         if let Some(path) = pizza_engine::analysis::dict::resolve("jieba", "dict.txt") {
             let f = std::fs::File::open(&path)
@@ -26,6 +28,19 @@ impl JiebaTokenizer {
                 .unwrap_or_else(|e| panic!("failed to load jieba dict {path:?}: {e}"));
             return JiebaTokenizer { jieba };
         }
+        #[cfg(feature = "default-dict")]
+        {
+            return JiebaTokenizer { jieba: Jieba::new() };
+        }
+        #[cfg(all(feature = "std", not(feature = "default-dict")))]
+        panic!(
+            "jieba dictionary not available: place the jieba dictionary at \
+             <analysis dict dir>/jieba/dict.txt (make init-analysis-dicts), or \
+             build pizza-analysis-jieba with the 'default-dict' feature"
+        );
+        // no_std without default-dict has no filesystem to read from; the
+        // tokenizer degrades to whole-string tokens.
+        #[cfg(all(not(feature = "std"), not(feature = "default-dict")))]
         JiebaTokenizer {
             jieba: Jieba::new(),
         }
@@ -61,6 +76,29 @@ impl Tokenizer for JiebaTokenizer {
     }
 }
 
+#[cfg(feature = "std")]
+#[doc(hidden)]
+/// Point the analysis dictionary directory at this crate's `data/` copy so
+/// tests can construct [`JiebaTokenizer`] under any feature selection (the
+/// external file must be laid out as `<dict_dir>/jieba/dict.txt`).
+pub fn init_test_dict_dir() {
+    static ONCE: std::sync::Once = std::sync::Once::new();
+    ONCE.call_once(|| {
+        let dir = std::env::temp_dir().join(format!(
+            "pizza-jieba-test-dict-{}",
+            std::process::id()
+        ));
+        let ns = dir.join("jieba");
+        if std::fs::create_dir_all(&ns).is_ok() {
+            let _ = std::fs::copy(
+                concat!(env!("CARGO_MANIFEST_DIR"), "/data/dict.txt"),
+                ns.join("dict.txt"),
+            );
+        }
+        pizza_engine::analysis::dict::set_dict_dir(&dir);
+    });
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -68,6 +106,7 @@ mod tests {
 
     #[test]
     fn test_jieba_tokenizing() {
+        init_test_dict_dir();
         let tokenizer = JiebaTokenizer::new();
 
         let text = "你今天很帅！";

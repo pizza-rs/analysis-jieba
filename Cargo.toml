@@ -12,11 +12,18 @@ license = "MIT"
 
 
 [features]
-default = []
+default = ["default-dict"]
+# Use jieba-rs's embedded default dictionary as the fallback when no
+# external dict.txt is configured (standalone/test builds are self-
+# contained). The default pizza build opts out (the dictionary plus the
+# unused tfidf idf table cost ~11MB of binary) and loads
+# `<dict_dir>/jieba/dict.txt` instead — deploy it with
+# `make init-analysis-dicts`.
+default-dict = ["jieba-rs/default-dict"]
 std = ["pizza-engine/std"]
 
 [dependencies]
 pizza-common = { path = "../../lib/common" }
 pizza-engine = { path = "../../lib/engine", default-features = false }
 
-jieba-rs = { version = "0.7", features = ["tfidf", "textrank","default-dict"],default-features = false }
+jieba-rs = { version = "0.7", default-features = false }
