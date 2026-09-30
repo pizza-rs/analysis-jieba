@@ -8,7 +8,6 @@ use pizza_engine::analysis::Tokenizer;
 // ═══════════════════════════════════════════════════════════════════════════════
 // Helpers
 
-
 /// Construct through the external dictionary so these tests pass under any
 /// feature selection (see `init_test_dict_dir`).
 fn new_tok() -> JiebaTokenizer {
